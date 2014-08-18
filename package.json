@@ -1,0 +1,13 @@
+{
+  "name": "ember-cli-deploy",
+  "version": "0.0.0",
+  "description": "An Ember-CLI addon for lightening fast deployment of applications",
+  "homepage": "https://github.com/achambers/ember-cli-deploy",
+  "repository": "git@github.com:achambers/ember-cli-deploy.git",
+  "main": "index.js",
+  "author": "Aaron Chambers",
+  "license": "MIT",
+  "keywords": [
+    "ember-addon"
+  ]
+}
