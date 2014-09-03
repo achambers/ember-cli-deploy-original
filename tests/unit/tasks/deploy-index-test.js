@@ -87,7 +87,6 @@ describe('deploy-index task', function() {
       assert.include(mockUI.output[2], 'ember activate 123456');
     })
     .catch(function(error) {
-      console.log(error);
       assert.ok(false, 'Shouldn\'t have thrown an error');
     });
   });
