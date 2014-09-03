@@ -1,7 +1,7 @@
 'use strict';
 
-var assert  = require('../../helpers/assert');
-var GitUtils = require('../../../lib/utilities/git-utils');
+var assert      = require('../../helpers/assert');
+var GitUtils    = require('../../../lib/utilities/git-utils');
 var MockProject = require('../../helpers/mock-project');
 
 describe('git-utils', function() {
