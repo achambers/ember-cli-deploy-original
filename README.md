@@ -1,21 +1,21 @@
-#ember-cli-deploy
+# ember-cli-deploy
 
 > An Ember-CLI addon for lightening fast deployment of applications
 
-##Motivation
+## Motivation
 
 This addon was inspired by [Luke Melia][1]'s RailsConf 2014 presentation - [Lightning Fast Deployment of Your Rails-backed JavaScript app][2].
 
-##Synopsis
+## Synopsis
 
-This plugin is designed to aid in the deployment workflow of an [Ember CLI][5] application.  The worflow is designed to follow on from a successful `ember build` command and runs as follows:
+This plugin is designed to aid in the deployment workflow of an [Ember CLI][5] application. The workflow is designed to follow on from a successful `ember build` command and runs as follows:
 
 - Create an [Ember CLI][5] build
 - Deploy assets to S3
 - Deploy index.html to Redis
 - (At some point afterwards) Activate a released index.html to be the current live version
 
-##Installation
+## Installation
 
 From within your [Ember CLI][5] application, run:
 
@@ -23,7 +23,7 @@ From within your [Ember CLI][5] application, run:
 npm install --save-dev ember-cli-deploy
 ```
 
-##Configuration
+## Configuration
 
 Any of the command line options passed in to the following commands can alternatively be either exported as environment variables or specified in a `.env` file.
 
@@ -35,33 +35,33 @@ Simply change the option flag to be `UPPERCASED` and `UNDER_SCORED`, eg:
 
 This command is responsible for pushing your index.html file to a Redis instance.
 
-###Usage
+### Usage
 
 ```shell
 ember deploy:index <options>
 ```
 
-###Options
+### Options
 
-####--dist-dir (optional)
+#### --dist-dir (optional)
 Default: `dist`
 
 Should point to the dist directory that contains the built index.html.
 
-####--redis-host (required)
+#### --redis-host (required)
 
 The host server of the Redis instance to deploy the index.html to.
 
-####--redis-port (required)
+#### --redis-port (required)
 
 The host port of the Redis instance to deploy the index.html to.
 
-####--redis-password (optional)
+#### --redis-password (optional)
 Default: `null`
 
 The password of the Redis instance to deploy the index.html to.
 
-##Tests
+## Tests
 
 To run the tests, run:
 
@@ -69,7 +69,7 @@ To run the tests, run:
 npm test
 ```
 
-##Honourable Mentions
+## Honourable Mentions
 
 The following sites have contributed in some way, shape or form in the creation of this addon.
 
@@ -79,7 +79,7 @@ The following sites have contributed in some way, shape or form in the creation 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
 
-##Maintainers
+## Maintainers
 
 - Aaron Chambers (achambers@gmail.com)
 
