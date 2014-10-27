@@ -61,6 +61,40 @@ Default: `null`
 
 The password of the Redis instance to deploy the index.html to.
 
+## *ember deploy:assets*
+
+This command is responsible for pushing your assets to an S3 bucket.
+
+### Usage
+
+```shell
+ember deploy:assets <options>
+```
+
+### Options
+
+#### --dist-dir (optional)
+Default: `dist`
+
+Should point to the `dist` directory that contains the built assets.
+
+#### --s3-access-key-id (required)
+
+The access token that has permission to push to your S3 bucket.
+
+#### --s3-secret-access-key (required)
+
+The token secret that belongs to the `s3-access-key-id`.
+
+#### --s3-bucket-name (required)
+
+The S3 bucket to push assets to.
+
+#### --s3-region (optional)
+Default: `us-east-1`
+
+The region that your S3 bucket sits in.
+
 ## Tests
 
 To run the tests, run:
@@ -85,6 +119,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 - [v0.0.1][6]
+- [v0.0.2][7]
 
 
 [1]: http://www.lukemelia.com "Luke Melia"
@@ -93,3 +128,4 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 [4]: http://blog.abuiles.com/blog/2014/07/08/lightning-fast-deployments-with-rails/ "Lightning Fast Deployments With Rails (in the Wild)."
 [5]: http://ember-cli.com "Ember CLI"
 [6]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.1 "Release v0.0.1"
+[7]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.2 "Release v0.0.2"
