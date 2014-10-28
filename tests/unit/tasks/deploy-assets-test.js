@@ -6,7 +6,7 @@ var MockProject    = require('../../helpers/mock-project');
 var MockUI         = require('../../helpers/mock-ui');
 var MockS3Uploader = require('../../helpers/mock-s3-uploader');
 
-var Command        = proxyquire('../../../lib/tasks/deploy-assets', { '../utilities/s3-uploader': MockS3Uploader });
+var Task           = proxyquire('../../../lib/tasks/deploy-assets', { '../utilities/s3-uploader': MockS3Uploader });
 
 describe('deploy-assets task', function() {
   var subject;
@@ -16,7 +16,7 @@ describe('deploy-assets task', function() {
   beforeEach(function() {
     mockUI = new MockUI();
 
-    subject = new Command({
+    subject = new Task({
       project: new MockProject(),
       ui: mockUI
     });
