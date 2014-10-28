@@ -31,36 +31,6 @@ Simply change the option flag to be `UPPERCASED` and `UNDER_SCORED`, eg:
 
 `--redis-host` would be specified as `REDIS_HOST`
 
-## *ember deploy:index*
-
-This command is responsible for pushing your index.html file to a Redis instance.
-
-### Usage
-
-```shell
-ember deploy:index <options>
-```
-
-### Options
-
-#### --dist-dir (optional)
-Default: `dist`
-
-Should point to the dist directory that contains the built index.html.
-
-#### --redis-host (required)
-
-The host server of the Redis instance to deploy the index.html to.
-
-#### --redis-port (required)
-
-The host port of the Redis instance to deploy the index.html to.
-
-#### --redis-password (optional)
-Default: `null`
-
-The password of the Redis instance to deploy the index.html to.
-
 ## *ember deploy:assets*
 
 This command is responsible for pushing your assets to an S3 bucket.
@@ -95,6 +65,67 @@ Default: `us-east-1`
 
 The region that your S3 bucket sits in.
 
+## *ember deploy:index*
+
+This command is responsible for pushing your index.html file to a Redis instance.
+
+### Usage
+
+```shell
+ember deploy:index <options>
+```
+
+### Options
+
+#### --dist-dir (optional)
+Default: `dist`
+
+Should point to the dist directory that contains the built index.html.
+
+#### --redis-host (required)
+
+The host server of the Redis instance to deploy the index.html to.
+
+#### --redis-port (required)
+
+The host port of the Redis instance to deploy the index.html to.
+
+#### --redis-password (optional)
+Default: `null`
+
+The password of the Redis instance to deploy the index.html to.
+
+## *ember activate*
+
+This command is responsible for activating a deployed index.html file.  The process of activating the index.html file will update the `index:current` entry in Redis to be the index.html file for the specified `<key>`.
+
+### Usage
+
+```shell
+ember activate <key> <options>
+```
+
+### Arguments
+
+#### \<key\> (required)
+
+This should be the short commit hash for the a previously deployed index.html file.
+
+### Options
+
+#### --redis-host (required)
+
+The host server of the Redis instance to deploy the index.html to.
+
+#### --redis-port (required)
+
+The host port of the Redis instance to deploy the index.html to.
+
+#### --redis-password (optional)
+Default: `null`
+
+The password of the Redis instance to deploy the index.html to.
+
 ## Tests
 
 To run the tests, run:
@@ -118,9 +149,9 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 - Aaron Chambers (achambers@gmail.com)
 
 ## Release History
-- [v0.0.1][6]
+- [v0.0.3][8]
 - [v0.0.2][7]
-
+- [v0.0.1][6]
 
 [1]: http://www.lukemelia.com "Luke Melia"
 [2]: http://www.confreaks.com/videos/3324-railsconf-lightning-fast-deployment-of-your-rails-backed-javascript-app "Lightning Fast Deployment of Your Rails-backed JavaScript app"
@@ -129,3 +160,4 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 [5]: http://ember-cli.com "Ember CLI"
 [6]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.1 "Release v0.0.1"
 [7]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.2 "Release v0.0.2"
+[8]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.3 "Release v0.0.3"
