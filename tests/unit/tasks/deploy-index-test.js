@@ -81,8 +81,8 @@ describe('deploy-index task', function() {
     redis.throwSetError(false);
 
     return subject.run(taskOptions).then(function() {
-      assert.include(mockUI.output[0], 'index.html successfully deployed to Redis');
-      assert.include(mockUI.output[1], 'To Activate:');
+      assert.include(mockUI.output[0], 'Successfully deployed to Redis: tests/fixtures/dist/index.html');
+      assert.include(mockUI.output[1], 'To activate index.html:');
       assert.include(mockUI.output[2], 'ember activate 123456');
     })
     .catch(function(error) {

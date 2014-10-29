@@ -65,6 +65,11 @@ describe('deploy-assets task', function() {
 
       assert.include(paths, 'assets/app.css');
       assert.include(paths, 'assets/app.js');
+
+      assert.include(mockUI.output[0], 'Successfully uploaded: assets/app.css');
+      assert.include(mockUI.output[1], 'Successfully uploaded: assets/app.js');
+      assert.include(mockUI.output[2], 'To deploy index.html');
+      assert.include(mockUI.output[3], 'ember deploy:index');
     }, function(error) {
       assert.ok(false, 'Should have resolved due to successful upload of assets');
     });
