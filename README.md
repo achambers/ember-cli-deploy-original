@@ -63,6 +63,12 @@ The S3 bucket to push assets to.
 #### --s3-region (optional)
 Default: `us-east-1`
 
+#### --file-pattern (optional)
+
+A glob file pattern that specifies the files to be uploaded to S3.
+
+Default: `**/*.{js,css,png,gif,jpg}`
+
 The region that your S3 bucket sits in.
 
 ## *ember deploy:index*

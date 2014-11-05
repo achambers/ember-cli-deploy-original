@@ -15,6 +15,7 @@ describe('deploy:assets command', function() {
       s3SecretAccessKey: 'secret',
       s3BucketName: 'bucket',
       s3Region: 'eu-west-1',
+      filePattern: '**/*.*'
     };
 
     command.project = new MockProject();
@@ -62,7 +63,7 @@ describe('deploy:assets command', function() {
         run: function(options) {
           return Promise.resolve(options);
         }
-      }
+      };
     };
 
     return command.run(commandOptions).then(function(options) {
@@ -71,6 +72,7 @@ describe('deploy:assets command', function() {
       assert.equal(options.s3.secret, 'secret', 'S3 secret should be set in options');
       assert.equal(options.s3.bucket, 'bucket', 'S3 bucket should be set in options');
       assert.equal(options.s3.region, 'eu-west-1', 'S3 region should be set in options');
+      assert.equal(options.filePattern, '**/*.*', 'File pattern should be set in options');
     });
   });
 });
