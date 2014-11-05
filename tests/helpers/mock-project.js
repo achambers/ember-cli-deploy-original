@@ -1,7 +1,8 @@
 'use strict';
 
-var MockProject = function() {
-  this.root = process.cwd();
+var MockProject = function(options) {
+	options = options || {};
+	this.root = options.cwd || process.cwd();
 };
 
 module.exports = MockProject;
