@@ -47,13 +47,5 @@ describe('find-assets', function() {
       assert.ok(result.indexOf('assets/app.css') > -1);
     });
   });
-
-  //describe('#branch', function() {
-    //it('returns the branch name', function() {
-      //var result = subject.branch();
-
-      //assert.ok(/.+/.test(result), 'Should not be able to return hash as HEAD should have no ref path');
-    //});
-  //});
 });
 
