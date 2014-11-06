@@ -28,7 +28,8 @@ describe('deploy-assets task', function() {
         secret: 'access-secret',
         region: 'region',
         bucket: 'bucket'
-      }
+      },
+      filePattern: '**/*.{js,css,png,gif,jpg}'
     }
   });
 
