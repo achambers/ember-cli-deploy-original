@@ -6,6 +6,8 @@
 
 This addon was inspired by [Luke Melia][1]'s RailsConf 2014 presentation - [Lightning Fast Deployment of Your Rails-backed JavaScript app][2].
 
+[ember-cli-deploy][9] was recently referenced in [ember-cli 101][10], the new book by [@abuiles][11], as the go to library for implementing Luke's ideas.
+
 ## Synopsis
 
 This plugin is designed to aid in the deployment workflow of an [Ember CLI][5] application. The workflow is designed to follow on from a successful `ember build` command and runs as follows:
@@ -137,6 +139,12 @@ Default: `null`
 
 The password of the Redis instance to deploy the index.html to.
 
+## Serving index.html
+
+A super simple way to serve the index.html from Redis is to spin up your own instance of [achambers/fuzzy-wookie][12]
+
+Simply click the 'Deploy to Heroku' button on the README and you will be creating your own instance on Heroku, complete with Redis addons in seconds.  It couldn't be easier.
+
 ## Tests
 
 To run the tests, run:
@@ -172,3 +180,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 [6]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.1 "Release v0.0.1"
 [7]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.2 "Release v0.0.2"
 [8]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.3 "Release v0.0.3"
+[9]: https://github.com/achambers/ember-cli-deploy "ember-cli-deploy"
+[10]: https://leanpub.com/ember-cli-101 "ember-cli 101"
+[11]: https://github.com/abuiles "Adolfo Builes"
+[12]: https://github.com/achambers/fuzzy-wookie "fuzzy-wookie - ember-cli-deploy server"
