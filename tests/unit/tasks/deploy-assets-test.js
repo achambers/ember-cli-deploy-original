@@ -23,13 +23,13 @@ describe('deploy-assets task', function() {
 
     taskOptions = {
       distDir: 'tests/fixtures/dist',
-      s3: {
-        key: 'access-key',
-        secret: 'access-secret',
+      assets: {
+        accessKeyId: 'access-key',
+        secretAccessKey: 'access-secret',
         region: 'region',
-        bucket: 'bucket'
+        bucket: 'bucket',
+        filePattern: '**/*.{js,css,png,gif,jpg}'
       },
-      filePattern: '**/*.{js,css,png,gif,jpg}'
     }
   });
 
