@@ -103,7 +103,7 @@ Default: `null`
 
 The password of the Redis instance to deploy the index.html to.
 
-### --git-root (optional)
+#### --git-root (optional)
 Default: ''
 
 The path to your project git repository. Unless specified here, this will default to your project root.
