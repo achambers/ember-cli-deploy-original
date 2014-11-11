@@ -25,7 +25,7 @@ describe('activate task', function() {
 
     taskOptions = {
       key: 'abcde',
-      redis: {
+      index: {
         host: '127.0.0.2',
         port: '1234',
         password: 'password'

@@ -6,6 +6,8 @@
 
 This addon was inspired by [Luke Melia][1]'s RailsConf 2014 presentation - [Lightning Fast Deployment of Your Rails-backed JavaScript app][2].
 
+If you haven't seen this presentation already, do yourself a favour and check it out.  If you can't be bothered, the premise of the presentation is about rethinking about where your app and assets are served from.  By serving your index.html from an in-memory store such as Redis and your assets from a CDN such as S3/Cloudfront you can achieve super quick deployment times along with great caching and speed.  Not to mention you will also be able to deploy any branch you like to a production like environment and access it from your production URL via a query param.
+
 [ember-cli-deploy][9] was recently referenced in [ember-cli 101][10], the new book by [@abuiles][11], as the go to library for implementing Luke's ideas.
 
 ## Synopsis
@@ -25,125 +27,59 @@ From within your [Ember CLI][5] application, run:
 npm install --save-dev ember-cli-deploy
 ```
 
+## Commands
+
+[ember-cli-deploy][9] currently supports the following commands:
+
+- `ember deploy:assets` - Pushes your assets to a static file host.  Currently only S3 is supported but more will be supported in the future
+- `ember deploy:index` - Pushes your index.html file to an in memory store.  Currently only Redis is supported.
+- `ember activate <key>` - Marks the index.html file for the specified key as the currently active file to be served.
+
+Any of these commands can be passed an optional `--environment` argument which will specify which configuration to use.  If no `--environment` argument is specified it will default to `--environment development`
+
 ## Configuration
 
-Any of the command line options passed in to the following commands can alternatively be either exported as environment variables or specified in a `.env` file.
+[ember-cli-deploy][9] will look for a configuration file in your app's `config/deploy` directory with a name based on the `--environment` passed in to the command.  You must specify a config file for each environment you would like to deploy to.  For instance:
 
-Simply change the option flag to be `UPPERCASED` and `UNDER_SCORED`, eg:
+Running `ember deploy:assets --environment production` will look for a config file called `config/deploy/production.js`
 
-`--redis-host` would be specified as `REDIS_HOST`
+The configuration file is used to specify the parameters such as the credentials for the asset file host and in memory store.
 
-## *ember deploy:assets*
+The configuaration file can specify the following fields:
 
-This command is responsible for pushing your assets to an S3 bucket.
-
-### Usage
-
-```shell
-ember deploy:assets <options>
+```javascript
+{
+  distDir: 'dist', //the dir where your app files are build to. (optional, default: 'dist')
+  
+  assets: {
+    accessKeyId: 'some-access-key', //your S3 access token. (required)
+    secretAccessKey: 'some-secret', //your S3 secret. (required)
+    bucket: 'my-bucket', //your S3 bucket where the assets will be stored. (required)
+    region: 'eu-west-1', //the region your S3 bucket lives in. (options, default: 'us-east-1')
+    filePattern: '**/*.{js,css}' //the filePattern to search for assets. (optional, default: '**.*{js,css,png,gif,jpg}')
+  },
+  
+  index: {
+    host: 'jack.redistogo.com', //the redis host where your index.html is stored. (required)
+    port: '6379', //the redis port. (required)
+    password: 'some-password' //the redis password. (optional, default: null)
+  }
+}
 ```
-
-### Options
-
-#### --dist-dir (optional)
-Default: `dist`
-
-Should point to the `dist` directory that contains the built assets.
-
-#### --s3-access-key-id (required)
-
-The access token that has permission to push to your S3 bucket.
-
-#### --s3-secret-access-key (required)
-
-The token secret that belongs to the `s3-access-key-id`.
-
-#### --s3-bucket-name (required)
-
-The S3 bucket to push assets to.
-
-#### --s3-region (optional)
-Default: `us-east-1`
-
-The region that your S3 bucket sits in.
-
-#### --file-pattern (optional)
-Default: `**/*.{js,css,png,gif,jpg}`
-
-A glob file pattern that specifies the files to be uploaded to S3.
-
-
-## *ember deploy:index*
-
-This command is responsible for pushing your index.html file to a Redis instance.
-
-### Usage
-
-```shell
-ember deploy:index <options>
-```
-
-### Options
-
-#### --dist-dir (optional)
-Default: `dist`
-
-Should point to the dist directory that contains the built index.html.
-
-#### --redis-host (required)
-
-The host server of the Redis instance to deploy the index.html to.
-
-#### --redis-port (required)
-
-The host port of the Redis instance to deploy the index.html to.
-
-#### --redis-password (optional)
-Default: `null`
-
-The password of the Redis instance to deploy the index.html to.
-
-#### --git-root (optional)
-Default: ''
-
-The path to your project git repository. Unless specified here, this will default to your project root.
-
-## *ember activate*
-
-This command is responsible for activating a deployed index.html file.  The process of activating the index.html file will update the `index:current` entry in Redis to be the index.html file for the specified `<key>`.
-
-### Usage
-
-```shell
-ember activate <key> <options>
-```
-
-### Arguments
-
-#### \<key\> (required)
-
-This should be the short commit hash for the a previously deployed index.html file.
-
-### Options
-
-#### --redis-host (required)
-
-The host server of the Redis instance to deploy the index.html to.
-
-#### --redis-port (required)
-
-The host port of the Redis instance to deploy the index.html to.
-
-#### --redis-password (optional)
-Default: `null`
-
-The password of the Redis instance to deploy the index.html to.
 
 ## Serving index.html
 
 A super simple way to serve the index.html from Redis is to spin up your own instance of [achambers/fuzzy-wookie][12]
 
-Simply click the 'Deploy to Heroku' button on the README and you will be creating your own instance on Heroku, complete with Redis addons in seconds.  It couldn't be easier.
+Simply click the 'Deploy to Heroku' button on the README and you will be creating your own instance on Heroku, complete with Redis addons in seconds.
+
+Once this instance is up and running, put the details of the Redis server into your [ember-cli-deploy][9] configuration and you'll be ready to deploy.
+
+To get the Redis configuration details, run the following command in your console:
+
+```bash
+heroku config --app my-app | grep REDISTOGO_URL
+```
 
 ## Tests
 
@@ -159,6 +95,7 @@ The following sites have contributed in some way, shape or form in the creation 
 
 - [Framework agnostic, fast zero-downtime Javascript app deployment][3]
 - [Lightning Fast Deployments With Rails (in the Wild).][4]
+- [ember-cli 101][10] by [@abuiles][11]
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
@@ -168,6 +105,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 - Aaron Chambers (achambers@gmail.com)
 
 ## Release History
+- [v0.0.4][13]
 - [v0.0.3][8]
 - [v0.0.2][7]
 - [v0.0.1][6]
@@ -184,3 +122,4 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 [10]: https://leanpub.com/ember-cli-101 "ember-cli 101"
 [11]: https://github.com/abuiles "Adolfo Builes"
 [12]: https://github.com/achambers/fuzzy-wookie "fuzzy-wookie - ember-cli-deploy server"
+[13]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.4 "Release v0.0.4"
