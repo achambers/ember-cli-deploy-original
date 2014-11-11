@@ -4,7 +4,7 @@ var assert      = require('../../helpers/assert');
 var command     = require('../../../lib/commands/deploy-index');
 var MockProject = require('../../helpers/mock-project');
 var MockTask = require('../../helpers/mock-task');
-var Promise     = require('../../../lib/ext/promise');
+var Promise     = require('ember-cli/lib/ext/promise');
 
 describe('deploy:index command', function() {
   var commandOptions;
