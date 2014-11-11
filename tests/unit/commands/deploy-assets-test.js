@@ -3,7 +3,7 @@
 var assert      = require('../../helpers/assert');
 var command     = require('../../../lib/commands/deploy-assets');
 var MockProject = require('../../helpers/mock-project');
-var Promise     = require('../../../lib/ext/promise');
+var Promise     = require('ember-cli/lib/ext/promise');
 
 describe('deploy:assets command', function() {
   var commandOptions;
