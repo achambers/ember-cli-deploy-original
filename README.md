@@ -49,8 +49,6 @@ The configuaration file can specify the following fields:
 
 ```javascript
 module.exports = {
-  distDir: 'dist', //the dir where your app files are build to. (optional, default: 'dist')
-  
   assets: {
     accessKeyId: 'some-access-key', //your S3 access token. (required)
     secretAccessKey: 'some-secret', //your S3 secret. (required)
@@ -58,7 +56,7 @@ module.exports = {
     region: 'eu-west-1', //the region your S3 bucket lives in. (options, default: 'us-east-1')
     filePattern: '**/*.{js,css}' //the filePattern to search for assets. (optional, default: '**.*{js,css,png,gif,jpg}')
   },
-  
+
   index: {
     host: 'jack.redistogo.com', //the redis host where your index.html is stored. (required)
     port: '6379', //the redis port. (required)
@@ -66,6 +64,91 @@ module.exports = {
   }
 };
 ```
+
+## Adapters
+
+[ember-cli-deploy][9] supports the ability for users to choose where they would like to upload their `index.html` and `assets` to.  Luke's [presentation][2] talked about using `Redis` as the in-memory store for the index.html and `S3` for the assets.  However, this doesn't have to be the case.  Through the use of `adapters`, the users of [ember-cli-deploy][9] can choose which backend they would prefer to use.
+
+[ember-cli-deploy][9] will support the concept of two types of adapters, `index-adapter`s and `asset-adapter`s.
+
+### Using an adapter
+
+As adapters are just [ember-cli addons][14], [ember-cli-deploy][9] will automatically detect when they are installed in the parent [Ember CLI][5] project.  To install an adapter, run the following from your [Ember CLI][5] application:
+
+```shell
+npm install --save-dev <ember-cli-deploy adapter name>
+```
+
+If multiple adapters are installed, [ember-cli-deploy][9] will choose the first one it finds.
+
+### Contributing and creating an adapter
+
+Adapters are simply [ember-cli addons][14] that expose an `adapter` property which returns an adapter class that conforms to the expected interface for either an `index-adapter` or `asset-adapter`.
+
+An example of an adapter addon is [ember-cli-deploy-redis-index-adapter][15]:
+
+```javascript
+//index.js
+
+var RedisIndexAdapter = require('./lib/redis-index-adapter');
+
+function EmberCLIDeployRedisIndexAdapter() {
+  this.name = 'ember-cli-deploy-redis-index-adapter';
+  this.adapter = RedisIndexAdapter;
+}
+
+module.exports = EmberCLIDeployRedisIndexAdapter;
+```
+
+### Index Adapters
+
+The purpose of the `index-adapter` is to upload the `index.html` to an in-memory store.  An example of such an adapter is as follows:
+
+```javascript
+function Adapter(options) {
+  this.appId: options.appId;
+  this.connection: options.connection
+}
+
+Adapter.prototype.upload = function(data) {/* some logic to upload index.html*/};
+
+Adapter.type = 'index-adapter';
+```
+
+#### constructor
+
+When constructing an instance of an `index-adatper`, [ember-cli-deploy][9] will initialise it with an `appId` and the `connection` details for the in-memory store, as specified in the `index` property of the current [configuration][16]. An example of this is as follows:
+
+```javascript
+// lib/tasks/deploy-index.js
+
+var adapter = new IndexAdapter({
+  appId: this.project.name(),
+  connection: config.index
+});
+```
+
+#### Adapter.type (required)
+
+This tells [ember-cli-deploy][9] what type of adapter it is and is a required property.  For Index Adapters, `type` must be set to `index-adapter`.
+
+#### Adapter.prototype.upload(data) (required)
+
+This function must do the actual work.  It must upload the `data` passed to it and return a Promise resolving to the key that the data was uploaded with.
+
+#### Adapter.prototype.setCurrent(key) (required)
+
+This function must set the specified `key` as the current version.
+
+### Asset Adapters
+
+We haven't quite implemented this feature yet but it isn't far away.
+
+### Current Adapters
+
+The [ember-cli-deploy][9] adapters that currently exist are as follows:
+
+- [ember-cli-deploy-redis-index-adapter][15]
 
 ## Serving index.html
 
@@ -123,3 +206,6 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 [11]: https://github.com/abuiles "Adolfo Builes"
 [12]: https://github.com/achambers/fuzzy-wookie "fuzzy-wookie - ember-cli-deploy server"
 [13]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.4 "Release v0.0.4"
+[14]: http://www.ember-cli.com/#create-addon "Ember CLI addons"
+[15]: https://github.com/achambers/ember-cli-deploy-redis-index-adapter "ember-cli-deploy-redis-index-adapter"
+[16]: https://github.com/achambers/ember-cli-deploy#configuration "ember-cli-deploy configuration"
