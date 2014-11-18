@@ -48,7 +48,7 @@ The configuration file is used to specify the parameters such as the credentials
 The configuaration file can specify the following fields:
 
 ```javascript
-{
+module.exports = {
   distDir: 'dist', //the dir where your app files are build to. (optional, default: 'dist')
   
   assets: {
@@ -64,7 +64,7 @@ The configuaration file can specify the following fields:
     port: '6379', //the redis port. (required)
     password: 'some-password' //the redis password. (optional, default: null)
   }
-}
+};
 ```
 
 ## Serving index.html
