@@ -67,6 +67,16 @@ The configuaration file can specify the following fields:
 }
 ```
 
+Be sure to specify the base url to your asset host in `Brocfile.js` so your urls are rewritten when building.
+
+```javascript
+var app = new EmberApp({
+  fingerprint: {
+    prepend: '<the base url to your assets>'
+  }
+});
+```
+
 ## Serving index.html
 
 A super simple way to serve the index.html from Redis is to spin up your own instance of [achambers/fuzzy-wookie][12]
