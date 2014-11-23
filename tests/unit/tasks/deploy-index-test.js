@@ -20,7 +20,11 @@ describe('deploy-index task', function() {
 
     subject = new Task({
       project: new MockProject(),
-      ui: mockUI
+      ui: mockUI,
+      environment: 'development',
+      availableOptions: [
+        { name: 'environment', type: String, default: 'development' }
+      ]
     });
 
     taskOptions = {
@@ -84,6 +88,29 @@ describe('deploy-index task', function() {
       assert.include(mockUI.output[0], 'Successfully deployed to Redis: tests/fixtures/dist/index.html');
       assert.include(mockUI.output[1], 'To activate index.html:');
       assert.include(mockUI.output[2], 'ember activate 123456');
+      assert.notInclude(mockUI.output[2], '--environment=development');
+    })
+    .catch(function(error) {
+      assert.ok(false, 'Shouldn\'t have thrown an error');
+    });
+  });
+
+  it('includes the environment flag if not executing in the default environment', function() {
+    redis.throwSetError(false);
+
+    var productionTask = new Task({
+      project: new MockProject(),
+      ui: mockUI,
+      environment: 'production',
+      availableOptions: [
+        { name: 'environment', type: String, default: 'development' }
+      ]
+    });
+
+    return productionTask.run(taskOptions).then(function() {
+      assert.include(mockUI.output[0], 'Successfully deployed to Redis: tests/fixtures/dist/index.html');
+      assert.include(mockUI.output[1], 'To activate index.html:');
+      assert.include(mockUI.output[2], 'ember activate 123456 --environment=production');
     })
     .catch(function(error) {
       assert.ok(false, 'Shouldn\'t have thrown an error');
