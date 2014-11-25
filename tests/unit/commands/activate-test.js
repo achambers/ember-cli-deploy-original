@@ -1,44 +1,36 @@
 'use strict';
 
-var assert      = require('../../helpers/assert');
-var command     = require('../../../lib/commands/activate');
-var MockProject = require('../../helpers/mock-project');
-var MockTask = require('../../helpers/mock-task');
+var assert       = require('ember-cli/tests/helpers/assert');
+var Task         = require('ember-cli/lib/models/task');
+var Promise      = require('ember-cli/lib/ext/promise');
+var MockRegistry = require('../../helpers/mock-registry');
 
 describe('activate command', function() {
-  var commandOptions;
-  var rawArgs;
+  var subject;
+  var tasks;
 
   beforeEach(function() {
-    commandOptions = {
-      environment: 'development'
+    tasks = {
+      ActivateTask: Task.extend({
+        run: function(options) {
+          return Promise.resolve(options);
+        }
+      })
     };
 
-    rawArgs = ['12345'];
+    subject = require('../../../lib/commands/activate');
 
-    command.project = new MockProject({
-      cwd: process.cwd() + '/tests/fixtures'
-    });
-
-    command._tasks.ActivateTask = MockTask;
+    subject._tasks = tasks;
+    subject._registry = MockRegistry;
   });
 
-  describe('#run', function() {
-    it ('proceeds if all options are set', function() {
-      return command.run(commandOptions, rawArgs).then(function(config) {
-        assert.equal(config.key, '12345', 'Deploy key should be set in options');
-        assert.equal(config.index.host, 'localhost', 'Redis host should be set in options');
-        assert.equal(config.index.port, '1234', 'Redis port should be set in options');
-        assert.equal(config.index.password, 'password', 'Redis password should be set in options');
+  it('runs the activate task', function() {
+    return subject.run({environment: 'development'}, ['aaa'])
+      .then(function(options) {
+        assert.equal(options.environment, 'development');
+        assert.equal(options.key, 'aaa');
+      }, function() {
+        assert.ok(false, 'Should have resolved');
       });
-    });
-
-    it ('uses the first deploy key if multiple are specified', function() {
-      rawArgs = ['abcdef', '223344'];
-
-      return command.run(commandOptions, rawArgs).then(function(options) {
-        assert.equal(options.key, 'abcdef', 'Deploy key should be set in options');
-      });
-    });
   });
 });
