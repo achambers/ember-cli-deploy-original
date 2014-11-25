@@ -1,5 +1,4 @@
 module.exports = {
-  distDir: 'tests/fixtures/dist',
   index: {
     host: 'localhost',
     port: '1234',

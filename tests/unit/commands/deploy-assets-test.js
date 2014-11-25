@@ -3,7 +3,7 @@
 var assert      = require('../../helpers/assert');
 var command     = require('../../../lib/commands/deploy-assets');
 var MockProject = require('../../helpers/mock-project');
-var Promise     = require('../../../lib/ext/promise');
+var Promise     = require('ember-cli/lib/ext/promise');
 
 describe('deploy:assets command', function() {
   var commandOptions;
@@ -49,7 +49,6 @@ describe('deploy:assets command', function() {
 
       return command.run(commandOptions)
         .then(function(config) {
-          assert.equal(config.distDir, 'tests/fixtures/dist', 'distDir should be set in config');
           assert.equal(config.assets.accessKeyId, 'asdf', 'S3 key should be set in config');
           assert.equal(config.assets.secretAccessKey, '1234', 'S3 secret should be set in config');
           assert.equal(config.assets.bucket, 'my-bucket', 'S3 bucket should be set in config');

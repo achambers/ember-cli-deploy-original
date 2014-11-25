@@ -1,90 +1,95 @@
 'use strict';
 
-var proxyquire  = require('proxyquire');
-var assert      = require('../../helpers/assert');
-var MockProject = require('../../helpers/mock-project');
-var MockUI      = require('../../helpers/mock-ui');
-var MockRedis   = require('../../helpers/mock-redis');
+var assert       = require('ember-cli/tests/helpers/assert');
+var CLIPromise   = require('ember-cli/lib/ext/promise');
+var MockProject  = require('ember-cli/tests/helpers/mock-project');
+var MockUI       = require('ember-cli/tests/helpers/mock-ui');
+var MockRegistry = require('../../helpers/mock-registry');
+var MockAdapter  = require('../../helpers/mock-adapter');
 
-var redis       = new MockRedis();
-
-var Task        = proxyquire('../../../lib/tasks/activate', { 'redis': redis });
-
-describe('activate task', function() {
+describe('tasks/activate', function() {
+  var ActivtateTask;
   var subject;
+  var options, runOptions;
+  var succeeded, failed;
   var mockUI;
-  var taskOptions;
 
-  beforeEach(function() {
-    mockUI = new MockUI();
+  before(function() {
+    ActivtateTask = require('../../../lib/tasks/activate');
 
-    subject = new Task({
-      project: new MockProject(),
-      ui: mockUI
-    });
-
-    taskOptions = {
-      key: 'abcde',
-      index: {
-        host: '127.0.0.2',
-        port: '1234',
-        password: 'password'
+    succeeded = function(value) {
+      if (value) {
+        return CLIPromise.resolve(value);
       }
+      return CLIPromise.resolve();
+    };
+
+    failed = function(value) {
+      if (value) {
+        return CLIPromise.reject(value);
+      }
+      return CLIPromise.reject();
     };
   });
 
-  it('creates a redis client', function() {
-    return subject.run(taskOptions).then(function() {
-      assert.equal(redis.client().host(), '127.0.0.2');
-      assert.equal(redis.client().port(), '1234');
-      assert.equal(redis.client().options().auth_pass, 'password');
-    }, function(error) {
-      assert.ok(false, 'Shouldn\'t have thrown an error');
-    });
+  beforeEach(function() {
+    var mockProject = new MockProject();
+    mockProject.root = process.cwd() + '/tests/fixtures';
+
+    mockUI = new MockUI();
+
+    options = {
+      project: mockProject,
+      ui: mockUI,
+      registry: new MockRegistry()
+    };
+
+    runOptions = {
+      key: 'aaa',
+      environment: 'development'
+    };
   });
 
-  it('doesn\'t proceed if an error occurs when getting redis key', function() {
-    redis.throwGetError(true);
-
-    return subject.run(taskOptions).then(function() {
-      assert.ok(false, 'Should have errored due Redis error');
-    }, function(error) {
-      assert.include(error.message, 'Error occurred when retrieving key [abcde] from Redis');
-    });
+  after(function() {
+    ActivtateTask = null;
   });
 
-  it('doesn\'t proceed if data is empty for redis key', function() {
-    redis.returnData(null);
+  it('rejects if deploy version is not specified', function() {
+    subject = new ActivtateTask(options);
 
-    return subject.run(taskOptions).then(function() {
-      assert.ok(false, 'Should have errored due Redis error');
-    }, function(error) {
-      assert.include(error.message, 'Error occurred when retrieving key [abcde] from Redis');
-    });
+    delete runOptions.key;
+
+    return subject.run(runOptions)
+      .then(function() {
+        assert.ok(false,'Should have rejected due to missing key');
+      }, function(error) {
+        assert.include(error.message, 'The `ember activate` command requires a deploy version to be specified.');
+      });
   });
 
-  it('doesn\'t proceed if an error occurs when setting redis key', function() {
-    redis.throwGetError(false);
-    redis.returnData('helllo');
-    redis.throwSetError(true);
+  it('rejects if setting the current version fails', function() {
+    MockAdapter.prototype.setCurrent = failed;
 
-    return subject.run(taskOptions).then(function() {
-      assert.ok(false, 'Should have errored due Redis error');
-    }, function(error) {
-      assert.include(error.message, 'Error occured when setting redis key [abcde] to current');
-    });
+    subject = new ActivtateTask(options);
+
+    return subject.run(runOptions)
+      .then(function() {
+        assert.ok(false, 'Should have rejected');
+      }, function(error) {
+        assert.equal(error, 'aaa');
+      });
   });
 
-  it('proceeds if index.html is activated successfully', function() {
-    redis.throwGetError(false);
-    redis.returnData('helllo');
-    redis.throwSetError(false);
+  it('resolves if version is activated', function() {
+    MockAdapter.prototype.setCurrent = succeeded;
 
-    return subject.run(taskOptions).then(function() {
-      assert.include(mockUI.output[0], 'Success');
-      assert.include(mockUI.output[1], 'Release [abcde] successfully activated');
-    }, function(error) {
-      assert.ok(false, 'Shouldn\'t have thrown an error');
-    });
+    subject = new ActivtateTask(options);
+
+    return subject.run(runOptions)
+      .then(function() {
+        assert.equal(mockUI.output, 'Version `aaa` activated\n');
+      }, function(error) {
+        assert.ok(false, 'Should have resolved');
+      });
   });
 });

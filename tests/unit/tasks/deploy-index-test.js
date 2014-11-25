@@ -1,92 +1,90 @@
 'use strict';
 
-var proxyquire  = require('proxyquire');
-var assert      = require('../../helpers/assert');
-var MockProject = require('../../helpers/mock-project');
-var MockUI      = require('../../helpers/mock-ui');
-var MockRedis   = require('../../helpers/mock-redis');
+var assert      = require('ember-cli/tests/helpers/assert');
+var Promise     = require('ember-cli/lib/ext/promise');
+var MockProject = require('ember-cli/tests/helpers/mock-project');
+var MockUI      = require('ember-cli/tests/helpers/mock-ui');
+var MockAdapter = require('../../helpers/mock-adapter');
+var MockRegistry = require('../../helpers/mock-registry');
 
-var redis       = new MockRedis();
-
-var Task        = proxyquire('../../../lib/tasks/deploy-index', { 'redis': redis });
-
-describe('deploy-index task', function() {
+describe('tasks/deploy-index', function() {
+  var DeployIndexTask;
   var subject;
-  var taskOptions;
+  var options;
+  var rejected, resolved;
   var mockUI;
 
+  before(function() {
+    DeployIndexTask = require('../../../lib/tasks/deploy-index');
+
+    rejected = function() {
+      return Promise.reject();
+    };
+    resolved = function(value) {
+      if (value) {
+        return Promise.resolve(value);
+      }
+
+      return Promise.resolve();
+    };
+  });
+
   beforeEach(function() {
+    MockAdapter.prototype.upload = resolved.bind(this, 'aaa');
+
+    var mockProject = new MockProject();
+    mockProject.root = process.cwd() + '/tests/fixtures';
+
     mockUI = new MockUI();
 
-    subject = new Task({
-      project: new MockProject(),
-      ui: mockUI
-    });
-
-    taskOptions = {
-      hash: '123456',
-      index: {
-        host: '127.0.0.1',
-        port: '1234',
-        password: 'password'
-      },
-      distDir: 'tests/fixtures/dist'
-    }
+    options = {
+      project: mockProject,
+      ui: mockUI,
+      _indexFile: resolved
+    };
   });
 
-  it('doesn\'t proceed if distDir does not exist', function() {
-    taskOptions.distDir = 'dist';
-
-    return subject.run(taskOptions).then(function() {
-      assert.ok(false, 'Should have errored due to no dist dir found');
-    })
-    .catch(function(error) {
-      assert.include(error.message, 'Unable to find dist directory [dist/]');
-    });
+  after(function() {
+    DeployIndexTask = null;
   });
 
-  it('doesn\'t proceed if index.html does not exist', function() {
-    taskOptions.distDir = 'tests/fixtures/dist-no-index';
+  it('rejects if index.html cannot be found', function() {
+    options._indexFile = rejected;
+    options.registry = new MockRegistry();
 
-    return subject.run(taskOptions).then(function() {
-      assert.ok(false, 'Should have errored due to no index.html found');
-    })
-    .catch(function(error) {
-      assert.include(error.message, 'Unable to find index.html file [tests/fixtures/dist-no-index/index.html]');
-    });
+    subject = new DeployIndexTask(options);
+
+    return subject.run({environment: 'development'})
+      .then(function() {
+        assert.ok(false);
+      }, function(error) {
+        assert.equal(error.message, 'index.html could not be found.\n');
+      });
   });
 
-  it('creates a redis client', function() {
-    return subject.run(taskOptions).then(function() {
-      assert.equal(redis.client().host(), '127.0.0.1');
-      assert.equal(redis.client().port(), '1234');
-      assert.equal(redis.client().options().auth_pass, 'password');
-    })
-    .catch(function(error) {
-      assert.ok(false, 'Shouldn\'t have thrown an error');
-    });
+  it('rejects if upload fails', function() {
+    MockAdapter.prototype.upload = rejected;
+    options.registry = new MockRegistry();
+
+    subject = new DeployIndexTask(options);
+
+    return subject.run({environment: 'development'})
+      .then(function() {
+        assert.ok(false, 'Should have rejected');
+      }, function() {
+        assert.ok(true);
+      });
   });
 
-  it('doesn\'t proceed if an error occurs when setting redis key', function() {
-    redis.throwSetError(true);
+  it('resolves if uploaded succeeds', function() {
+    options.registry = new MockRegistry();
+    subject = new DeployIndexTask(options);
 
-    return subject.run(taskOptions).then(function() {
-      assert.ok(false, 'Should have errored due Redis error');
-    }, function(error) {
-      assert.include(error.message, 'Error occurred when deploying index to Redis');
-    });
-  });
-
-  it('proceeds if index.html is set in redis successfully', function() {
-    redis.throwSetError(false);
-
-    return subject.run(taskOptions).then(function() {
-      assert.include(mockUI.output[0], 'Successfully deployed to Redis: tests/fixtures/dist/index.html');
-      assert.include(mockUI.output[1], 'To activate index.html:');
-      assert.include(mockUI.output[2], 'ember activate 123456');
-    })
-    .catch(function(error) {
-      assert.ok(false, 'Shouldn\'t have thrown an error');
-    });
+    return subject.run({environment: 'development'})
+      .then(function() {
+        assert.equal(mockUI.output, 'ember activate aaa\n');
+      }, function() {
+        assert.ok(false, 'Should have resolved');
+      });
   });
 });

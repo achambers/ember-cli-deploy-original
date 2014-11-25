@@ -1,6 +1,6 @@
 'use strict';
 
-var Promise     = require('../../lib/ext/promise');
+var Promise     = require('ember-cli/lib/ext/promise');
 
 function MockS3Uploader(params) {
   MockS3Uploader.params = params;

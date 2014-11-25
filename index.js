@@ -4,7 +4,7 @@ var commands  = require('./lib/commands');
 
 function EmberCLIDeploy(project) {
   this.project = project;
-  this.name = 'Ember CLI Deploy';
+  this.name = 'ember-cli-deploy';
 }
 
 EmberCLIDeploy.prototype.includedCommands = function() {
