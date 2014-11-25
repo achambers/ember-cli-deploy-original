@@ -188,6 +188,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 - Aaron Chambers (achambers@gmail.com)
 
 ## Release History
+- [v0.0.5][17]
 - [v0.0.4][13]
 - [v0.0.3][8]
 - [v0.0.2][7]
@@ -209,3 +210,4 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 [14]: http://www.ember-cli.com/#create-addon "Ember CLI addons"
 [15]: https://github.com/achambers/ember-cli-deploy-redis-index-adapter "ember-cli-deploy-redis-index-adapter"
 [16]: https://github.com/achambers/ember-cli-deploy#configuration "ember-cli-deploy configuration"
+[17]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.5 "Release v0.0.5"
