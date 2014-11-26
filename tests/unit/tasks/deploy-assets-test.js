@@ -75,4 +75,15 @@ describe('deploy-assets task', function() {
       assert.ok(false, 'Should have resolved due to successful upload of assets');
     });
   });
+
+  it('handles failed uploads', function() {
+    MockS3Uploader.prototype.rejectUpload();
+
+    return subject.run(taskOptions).then(function() {
+      assert.include(mockUI.output[0], 'Upload failed: assets/app.css');
+      assert.include(mockUI.output[1], 'Upload failed: assets/app.js');
+    }, function(error) {
+      assert.ok(false, 'Should have resolved even when unsuccessful upload of assets');
+    });
+  });
 });
