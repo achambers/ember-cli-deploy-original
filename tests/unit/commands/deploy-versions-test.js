@@ -11,7 +11,7 @@ describe('deploy:versions command', function() {
 
   beforeEach(function() {
     tasks = {
-      DeployIndex: Task.extend({
+      DeployVersionsTask: Task.extend({
         run: function(options) {
           return Promise.resolve(options);
         }
