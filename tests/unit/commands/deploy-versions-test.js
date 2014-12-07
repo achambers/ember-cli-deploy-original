@@ -6,12 +6,12 @@ var Promise      = require('ember-cli/lib/ext/promise');
 var MockRegistry = require('../../helpers/mock-registry');
 
 describe('deploy:versions command', function() {
-  var subject,
-      tasks;
+  var subject;
+  var tasks;
 
   beforeEach(function() {
     tasks = {
-      DeployIndex: Task.extend({
+      DeployVersionsTask: Task.extend({
         run: function(options) {
           return Promise.resolve(options);
         }

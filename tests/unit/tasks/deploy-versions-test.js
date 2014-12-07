@@ -1,10 +1,10 @@
 'use strict';
 
-var assert      = require('ember-cli/tests/helpers/assert');
-var Promise     = require('ember-cli/lib/ext/promise');
-var MockProject = require('ember-cli/tests/helpers/mock-project');
-var MockUI      = require('ember-cli/tests/helpers/mock-ui');
-var MockAdapter = require('../../helpers/mock-adapter');
+var assert       = require('ember-cli/tests/helpers/assert');
+var Promise      = require('ember-cli/lib/ext/promise');
+var MockProject  = require('ember-cli/tests/helpers/mock-project');
+var MockUI       = require('ember-cli/tests/helpers/mock-ui');
+var MockAdapter  = require('../../helpers/mock-adapter');
 var MockRegistry = require('../../helpers/mock-registry');
 
 describe('tasks/deploy-versions', function() {
@@ -49,7 +49,7 @@ describe('tasks/deploy-versions', function() {
 
     return subject.run({environment: 'development'})
     .then(function(outputStr) {
-      assert.equal(mockUI.output, 'aaa\nbbb');
+      assert.equal(mockUI.output, "The previous 2 versions uploaded:\naaa\nbbb");
     });
   });
 
