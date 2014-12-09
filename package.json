@@ -23,7 +23,7 @@
     "aws-sdk": "^2.0.17",
     "chalk": "^0.5.1",
     "core-object": "0.0.2",
-    "ember-cli-deploy-redis-index-adapter": "0.0.2",
+    "ember-cli-deploy-redis-index-adapter": "achambers/ember-cli-deploy-redis-index-adapter.git",
     "mime": "^1.2.11",
     "redis": "^0.12.1"
   },
