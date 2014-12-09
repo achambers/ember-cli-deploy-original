@@ -49,7 +49,7 @@ describe('tasks/deploy-versions', function() {
 
     return subject.run({environment: 'development'})
     .then(function(outputStr) {
-      assert.equal(mockUI.output, 'aaa\nbbb');
+      assert.equal(mockUI.output, "The previous 2 versions uploaded:\naaa\nbbb");
     });
   });
 
