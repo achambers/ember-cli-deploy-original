@@ -54,7 +54,7 @@ module.exports = {
     secretAccessKey: 'some-secret', //your S3 secret. (required)
     bucket: 'my-bucket', //your S3 bucket where the assets will be stored. (required)
     region: 'eu-west-1', //the region your S3 bucket lives in. (options, default: 'us-east-1')
-    filePattern: '**/*.{js,css}' //the filePattern to search for assets. (optional, default: '**.*{js,css,png,gif,jpg}')
+    filePattern: '**/*.{js,css}' //the filePattern to search for assets. (optional, default: '**/*.{js,css,png,gif,jpg}')
   },
 
   index: {
