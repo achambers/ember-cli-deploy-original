@@ -34,6 +34,7 @@ npm install --save-dev ember-cli-deploy
 - `ember deploy:assets` - Pushes your assets to a static file host.  Currently only S3 is supported but more will be supported in the future
 - `ember deploy:index` - Pushes your index.html file to an in memory store.  Currently only Redis is supported.
 - `ember activate <key>` - Marks the index.html file for the specified key as the currently active file to be served.
+- `ember deploy:versions` - List the previous versions deployed.
 
 Any of these commands can be passed an optional `--environment` argument which will specify which configuration to use.  If no `--environment` argument is specified it will default to `--environment development`
 
@@ -54,7 +55,7 @@ module.exports = {
     secretAccessKey: 'some-secret', //your S3 secret. (required)
     bucket: 'my-bucket', //your S3 bucket where the assets will be stored. (required)
     region: 'eu-west-1', //the region your S3 bucket lives in. (options, default: 'us-east-1')
-    filePattern: '**/*.{js,css}' //the filePattern to search for assets. (optional, default: '**.*{js,css,png,gif,jpg}')
+    filePattern: '**/*.{js,css}' //the filePattern to search for assets. (optional, default: '**/*.{js,css,png,gif,jpg}')
   },
 
   index: {
@@ -140,6 +141,10 @@ This function must do the actual work.  It must upload the `data` passed to it a
 
 This function must set the specified `key` as the current version.
 
+#### Adapter.prototype.listVersions(count) (required)
+
+This function must return an array of the keys of the previously deployed versions.
+
 ### Asset Adapters
 
 We haven't quite implemented this feature yet but it isn't far away.
@@ -188,6 +193,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 - Aaron Chambers (achambers@gmail.com)
 
 ## Release History
+- [v0.0.6][18]
 - [v0.0.5][17]
 - [v0.0.4][13]
 - [v0.0.3][8]
@@ -211,3 +217,4 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 [15]: https://github.com/achambers/ember-cli-deploy-redis-index-adapter "ember-cli-deploy-redis-index-adapter"
 [16]: https://github.com/achambers/ember-cli-deploy#configuration "ember-cli-deploy configuration"
 [17]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.5 "Release v0.0.5"
+[18]: https://github.com/achambers/ember-cli-deploy/releases/tag/v0.0.6 "Release v0.0.6"

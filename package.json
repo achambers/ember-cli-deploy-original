@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-deploy",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An Ember-CLI addon for lightening fast deployment of applications",
   "homepage": "https://github.com/achambers/ember-cli-deploy",
   "repository": {
@@ -23,7 +23,7 @@
     "aws-sdk": "^2.0.17",
     "chalk": "^0.5.1",
     "core-object": "0.0.2",
-    "ember-cli-deploy-redis-index-adapter": "0.0.2",
+    "ember-cli-deploy-redis-index-adapter": "achambers/ember-cli-deploy-redis-index-adapter.git",
     "mime": "^1.2.11",
     "redis": "^0.12.1"
   },
