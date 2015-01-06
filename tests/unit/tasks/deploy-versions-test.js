@@ -52,5 +52,4 @@ describe('tasks/deploy-versions', function() {
       assert.equal(mockUI.output, "The previous 2 versions uploaded:\naaa\nbbb");
     });
   });
-
 });
