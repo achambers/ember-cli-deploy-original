@@ -65,6 +65,15 @@ module.exports = {
   }
 };
 ```
+You will also need to update your `Brocfile.js` so that the asset host is prepended to the asset urls that ember writes to `index.html`:
+
+```
+var app = new EmberApp({
+  fingerprint: {
+    prepend: 'https://s3-us-west-1.amazonaws.com/my-bucket/'
+  }
+});
+```
 
 ## Adapters
 
