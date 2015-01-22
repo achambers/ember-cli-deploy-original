@@ -30,7 +30,7 @@ describe('assets-config-validator', function() {
   });
 
   describe('#validate', function() {
-    it('doesn\'nt proceed when assets is missing', function() {
+    it('doesn\'t proceed when assets is missing', function() {
       delete config.assets;
 
       return subject.validate(config)
