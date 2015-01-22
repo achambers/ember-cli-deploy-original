@@ -81,8 +81,9 @@ describe('tasks/deploy-index', function() {
     subject = new DeployIndexTask(options);
 
     return subject.run({environment: 'development'})
-      .then(function() {
+      .then(function(key) {
         assert.equal(mockUI.output, 'ember activate aaa\n');
+        assert.equal(key, 'aaa');
       }, function() {
         assert.ok(false, 'Should have resolved');
       });
