@@ -34,6 +34,7 @@ npm install --save-dev ember-cli-deploy
 - `ember deploy:assets` - Pushes your assets to a static file host.  Currently only S3 is supported but more will be supported in the future
 - `ember deploy:index` - Pushes your index.html file to an in memory store.  Currently only Redis is supported.
 - `ember activate <key>` - Marks the index.html file for the specified key as the currently active file to be served.
+- `ember deploy` - Performs all three of the steps above.
 - `ember deploy:versions` - List the previous versions deployed.
 
 Any of these commands can be passed an optional `--environment` argument which will specify which configuration to use.  If no `--environment` argument is specified it will default to `--environment development`
