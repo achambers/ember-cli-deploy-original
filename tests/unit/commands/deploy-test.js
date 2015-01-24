@@ -4,7 +4,6 @@ var assert      = require('../../helpers/assert');
 var command     = require('../../../lib/commands/deploy');
 var MockCommand = require('../../helpers/mock-command');
 var MockProject = require('../../helpers/mock-project');
-var Promise     = require('ember-cli/lib/ext/promise');
 
 describe('deploy command', function() {
   var commandOptions = {
