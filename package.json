@@ -25,7 +25,8 @@
     "core-object": "0.0.2",
     "ember-cli-deploy-redis-index-adapter": "achambers/ember-cli-deploy-redis-index-adapter.git",
     "mime": "^1.2.11",
-    "redis": "^0.12.1"
+    "redis": "^0.12.1",
+    "lodash": "^3.2.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",

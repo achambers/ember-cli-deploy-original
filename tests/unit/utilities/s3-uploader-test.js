@@ -12,7 +12,13 @@ describe('s3-uploader', function() {
     mockClient = new MockS3Client();
     subject = new S3Uploader({
       client: mockClient,
-      bucket: 'test-bucket'
+      bucket: 'test-bucket',
+      extensionOverrides: {
+        'css.gz': {
+          ContentType: 'text/css',
+          ContentEncoding: 'gzip',
+        }
+      }
     });
   });
 
@@ -52,6 +58,28 @@ describe('s3-uploader', function() {
           }, function() {
             assert.ok(false, 'Should not have rejected');
           });
+      });
+
+      it('uploads a file successfully with custom headers', function() {
+        var params = {
+          cwd: process.cwd(),
+          filePath: 'tests/fixtures/dist/assets/app.css.gz',
+        };
+
+        mockClient.resolveUpload();
+
+        return subject.uploadFile(params)
+          .then(function(filePath) {
+            assert.equal(filePath, 'tests/fixtures/dist/assets/app.css.gz');
+            assert.equal(mockClient.params['Bucket'], 'test-bucket');
+            assert.equal(mockClient.params['ACL'], 'public-read');
+            assert.equal(mockClient.params['ContentType'], 'text/css');
+            assert.equal(mockClient.params['ContentEncoding'], 'gzip');
+            assert.equal(mockClient.params['Key'], 'tests/fixtures/dist/assets/app.css.gz');
+          }, function() {
+            assert.ok(false, 'Should not have rejected');
+          });
+
       });
     });
 
