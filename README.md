@@ -1,3 +1,13 @@
+<hr>
+# BREAKING NEWS
+
+This repository is now **deprecated**.
+
+`ember-cli-deploy` and `ember-deploy` are currently in the process of collaborating and merging into the official Ember CLI deployment tool. For all your future Ember CLI deployment needs please look to [ember-cli/ember-cli-deploy](https://github.com/ember-cli/ember-cli-deploy).
+
+For existing users of this repo, a migration path will be available shortly.
+<hr>
+
 # ember-cli-deploy
 
 > An Ember-CLI addon for lightning fast deployment of applications
