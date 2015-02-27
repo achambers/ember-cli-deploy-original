@@ -26,6 +26,7 @@ describe('deploy-assets task', function() {
       assets: {
         accessKeyId: 'access-key',
         secretAccessKey: 'access-secret',
+        sessionToken: 'session-token',
         region: 'region',
         bucket: 'bucket',
         filePattern: '**/*.{js,css,png,gif,jpg}'
@@ -59,6 +60,7 @@ describe('deploy-assets task', function() {
 
       assert.equal(params.accessKeyId, 'access-key');
       assert.equal(params.secretAccessKey, 'access-secret');
+      assert.equal(params.sessionToken, 'session-token');
       assert.equal(params.region, 'region');
       assert.equal(params.bucket, 'bucket');
 
