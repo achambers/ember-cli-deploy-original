@@ -28,7 +28,13 @@ describe('deploy-assets task', function() {
         secretAccessKey: 'access-secret',
         region: 'region',
         bucket: 'bucket',
-        filePattern: '**/*.{js,css,png,gif,jpg}'
+        filePattern: '**/*.{js,css,css.gz,png,gif,jpg}',
+        extensionOverrides: {
+          'css.gz': {
+            ContentType: 'text/css',
+            ContentEncoding: 'gzip'
+          }
+        }
       },
     }
   });
@@ -61,16 +67,24 @@ describe('deploy-assets task', function() {
       assert.equal(params.secretAccessKey, 'access-secret');
       assert.equal(params.region, 'region');
       assert.equal(params.bucket, 'bucket');
+      assert.deepEqual(params.extensionOverrides, {
+        'css.gz': {
+          ContentType: 'text/css',
+          ContentEncoding: 'gzip'
+        }
+      });
 
       var paths = MockS3Uploader.paths;
 
       assert.include(paths, 'assets/app.css');
+      assert.include(paths, 'assets/app.css.gz');
       assert.include(paths, 'assets/app.js');
 
       assert.include(mockUI.output[0], 'Successfully uploaded: assets/app.css');
-      assert.include(mockUI.output[1], 'Successfully uploaded: assets/app.js');
-      assert.include(mockUI.output[2], 'To deploy index.html');
-      assert.include(mockUI.output[3], 'ember deploy:index');
+      assert.include(mockUI.output[1], 'Successfully uploaded: assets/app.css.gz');
+      assert.include(mockUI.output[2], 'Successfully uploaded: assets/app.js');
+      assert.include(mockUI.output[3], 'To deploy index.html');
+      assert.include(mockUI.output[4], 'ember deploy:index');
     }, function(error) {
       assert.ok(false, 'Should have resolved due to successful upload of assets');
     });
